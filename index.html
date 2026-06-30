@@ -737,6 +737,69 @@
             max-width: 750px;
         }
 
+        /* Футер со ссылкой на правила */
+        .footer {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(42, 51, 64, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .footer a {
+            color: #6d8cff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 20px;
+            border-radius: 60px;
+            background: rgba(109, 140, 255, 0.05);
+            border: 1px solid rgba(109, 140, 255, 0.1);
+        }
+
+        .footer a:hover {
+            color: #8b9fff;
+            background: rgba(109, 140, 255, 0.12);
+            border-color: rgba(109, 140, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(109, 140, 255, 0.1);
+        }
+
+        .footer a i {
+            font-size: 16px;
+        }
+
+        .footer .footer-text {
+            color: #5a6f8a;
+            font-size: 13px;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+            color: #889bb8;
+        }
+
+        .loading-spinner i {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+            color: #6d8cff;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 16px 18px;
@@ -801,6 +864,12 @@
             .app-info .app-title {
                 font-size: 14px;
             }
+
+            .footer {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
         }
 
         @media (max-width: 480px) {
@@ -829,7 +898,6 @@
             }
         }
 
-        /* Скрытие скроллбара для красоты */
         .modal::-webkit-scrollbar {
             width: 6px;
         }
@@ -871,12 +939,19 @@
                 <span class="badge-count" id="badgeCount"><i class="far fa-clock"></i> <span id="countNumber">0</span> активных</span>
             </div>
             <div id="applicationsList">
-                <div class="empty-state">
-                    <i class="far fa-file-alt"></i>
-                    <div class="empty-text">Пока нет заявок</div>
-                    <div style="font-size: 13px; margin-top: 4px; color: #5a6f8a;">Нажмите «Создать тему», чтобы подать заявку на стажёра</div>
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner"></i>
+                    Загрузка заявок...
                 </div>
             </div>
+        </div>
+
+        <!-- ФУТЕР СО ССЫЛКОЙ НА ПРАВИЛА -->
+        <div class="footer">
+            <span class="footer-text"><i class="fas fa-gavel"></i> Ознакомьтесь с правилами сервера</span>
+            <a href="https://sashka123485.github.io/Magicworld/" target="_blank">
+                <i class="fas fa-external-link-alt"></i> Правила VordWorld
+            </a>
         </div>
     </div>
 
@@ -967,6 +1042,7 @@
         let userIP = '';
         let applications = [];
         let nextId = 1;
+        let loading = false;
 
         // DOM элементы
         const modalOverlay = document.getElementById('modalOverlay');
@@ -979,30 +1055,97 @@
         const viewAppTitle = document.getElementById('viewAppTitle');
         const viewAppContent = document.getElementById('viewAppContent');
 
-        // ========== ФУНКЦИИ РАБОТЫ С LOCALSTORAGE ==========
-        function loadApplications() {
+        // ========== РАБОТА С JSON-ФАЙЛОМ НА СЕРВЕРЕ ==========
+        // Для работы нужно запустить сервер с поддержкой записи файлов
+        // Например, через Node.js или PHP
+
+        async function loadApplicationsFromServer() {
             try {
-                const saved = localStorage.getItem('vordworld_applications');
+                const response = await fetch('/api/applications');
+                if (response.ok) {
+                    const data = await response.json();
+                    applications = data.applications || [];
+                    nextId = data.nextId || 1;
+                    console.log('Загружено с сервера:', applications.length);
+                    renderApplications();
+                    return true;
+                }
+            } catch (e) {
+                console.log('Сервер недоступен, используем localStorage');
+            }
+            return false;
+        }
+
+        async function saveApplicationsToServer() {
+            try {
+                const response = await fetch('/api/applications', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        applications: applications,
+                        nextId: nextId
+                    })
+                });
+                if (response.ok) {
+                    console.log('Сохранено на сервер');
+                    return true;
+                }
+            } catch (e) {
+                console.log('Ошибка сохранения на сервер:', e);
+            }
+            return false;
+        }
+
+        // Резервное сохранение в localStorage (для офлайн-режима)
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem('vordworld_applications_backup', JSON.stringify({
+                    applications: applications,
+                    nextId: nextId
+                }));
+            } catch (e) {}
+        }
+
+        function loadFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('vordworld_applications_backup');
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     applications = parsed.applications || [];
                     nextId = parsed.nextId || 1;
-                    console.log('Загружено заявок:', applications.length);
+                    renderApplications();
+                    return true;
                 }
-            } catch (e) {
-                console.error('Ошибка загрузки заявок:', e);
+            } catch (e) {}
+            return false;
+        }
+
+        // Основная функция загрузки
+        async function loadApplications() {
+            const container = document.getElementById('applicationsList');
+            container.innerHTML = `
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner"></i>
+                    Загрузка заявок...
+                </div>
+            `;
+
+            const loaded = await loadApplicationsFromServer();
+            if (!loaded) {
+                loadFromLocalStorage();
+                if (applications.length === 0) {
+                    renderApplications();
+                }
             }
         }
 
-        function saveApplications() {
-            try {
-                localStorage.setItem('vordworld_applications', JSON.stringify({
-                    applications: applications,
-                    nextId: nextId
-                }));
-                console.log('Заявки сохранены, всего:', applications.length);
-            } catch (e) {
-                console.error('Ошибка сохранения заявок:', e);
+        // Основная функция сохранения
+        async function saveApplications() {
+            const saved = await saveApplicationsToServer();
+            if (!saved) {
+                saveToLocalStorage();
             }
         }
 
@@ -1114,7 +1257,6 @@
                 statusIcon = 'fa-times-circle';
             }
 
-            // Формируем ответы
             let repliesHtml = '';
             if (app.replies && app.replies.length > 0) {
                 repliesHtml = `<div class="replies-section"><h4><i class="fas fa-comments"></i> Ответы администрации</h4>`;
@@ -1182,7 +1324,6 @@
                 </div>
             `;
 
-            // Если админ - показываем кнопки управления и поле для ответа
             if (isAdmin) {
                 html += `
                     <div class="admin-actions">
@@ -1211,7 +1352,6 @@
                     </div>
                 `;
             } else {
-                // Для обычных пользователей показываем только ответы
                 if (app.replies && app.replies.length > 0) {
                     html += `<div class="replies-section"><h4><i class="fas fa-comments"></i> Ответы администрации</h4>${repliesHtml}</div>`;
                 }
@@ -1223,7 +1363,7 @@
         }
 
         // ========== УДАЛЕНИЕ АНКЕТЫ ==========
-        function deleteApplication(appId) {
+        async function deleteApplication(appId) {
             if (!confirm('Вы уверены, что хотите удалить эту анкету? Это действие нельзя отменить!')) {
                 return;
             }
@@ -1232,13 +1372,13 @@
             if (index === -1) return;
 
             applications.splice(index, 1);
-            saveApplications();
+            await saveApplications();
             renderApplications();
             closeViewModal();
         }
 
         // ========== ОТПРАВКА ОТВЕТА ==========
-        function sendReply(appId) {
+        async function sendReply(appId) {
             const textarea = document.getElementById('adminReplyText');
             if (!textarea) return;
             
@@ -1266,18 +1406,18 @@
                 time: timeStr
             });
 
-            saveApplications();
+            await saveApplications();
             renderApplications();
             openViewModal(appId);
         }
 
         // ========== ИЗМЕНЕНИЕ СТАТУСА ==========
-        function changeStatus(appId, newStatus) {
+        async function changeStatus(appId, newStatus) {
             const app = applications.find(a => a.id === appId);
             if (!app) return;
 
             app.status = newStatus;
-            saveApplications();
+            await saveApplications();
             renderApplications();
             openViewModal(appId);
         }
@@ -1289,7 +1429,7 @@
         }
 
         // ========== ОТПРАВКА ЗАЯВКИ ==========
-        function submitApplication() {
+        async function submitApplication() {
             const title = document.getElementById('appTitle').value.trim() || 'Без заголовка';
             const nick = document.getElementById('appNick').value.trim() || 'Неизвестный';
             const ageInput = document.getElementById('appAge');
@@ -1329,7 +1469,7 @@
             };
 
             applications.unshift(newApp);
-            saveApplications();
+            await saveApplications();
 
             document.getElementById('appTitle').value = '';
             document.getElementById('appNick').value = '';
@@ -1339,6 +1479,13 @@
 
             closeModal();
             renderApplications();
+            
+            // Показываем уведомление об успехе
+            const badge = document.getElementById('countNumber');
+            if (badge) {
+                badge.style.color = '#8bddb0';
+                setTimeout(() => { badge.style.color = ''; }, 2000);
+            }
         }
 
         // ========== УПРАВЛЕНИЕ МОДАЛКОЙ СОЗДАНИЯ ==========
@@ -1386,15 +1533,9 @@
 
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🚀 Страница загружена!');
+            console.log('🚀 VordWorld загружен!');
             loadApplications();
             checkAdminStatus();
-
-            if (applications.length === 0) {
-                renderApplications();
-            } else {
-                renderApplications();
-            }
         });
     </script>
 </body>
