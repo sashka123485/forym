@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VordWorld · Заявки на стажёра (HW)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #070a0f 0%, #0f151f 50%, #0a0e16 100%);
+            color: #e4e9f0;
+            padding: 24px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(70, 130, 255, 0.05) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 80%, rgba(150, 70, 255, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 950px;
+            width: 100%;
+            background: rgba(20, 26, 34, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 32px;
+            padding: 30px 34px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(42, 51, 64, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(42, 51, 64, 0.4);
+            padding-bottom: 20px;
+            margin-bottom: 26px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #8b7fff, #5b7cff, #6d8cff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 i {
+            -webkit-text-fill-color: initial;
+            color: #6d8cff;
+            font-size: 28px;
+            filter: drop-shadow(0 0 20px rgba(109, 140, 255, 0.2));
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3f6bb0, #2d5a9e);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(94, 135, 212, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(63, 107, 176, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(63, 107, 176, 0.4);
+            background: linear-gradient(135deg, #4a7ac4, #3568b0);
+            border-color: rgba(94, 135, 212, 0.6);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0px);
+        }
+
+        .applications-panel {
+            background: rgba(16, 23, 31, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 24px;
+            border: 1px solid rgba(38, 48, 61, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .applications-panel:hover {
+            border-color: rgba(38, 48, 61, 0.7);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .panel-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #d3def5;
+        }
+
+        .panel-header h3 i {
+            color: #6d8cff;
+            font-size: 20px;
+            filter: drop-shadow(0 0 12px rgba(109, 140, 255, 0.15));
+        }
+
+        .badge-count {
+            background: rgba(41, 54, 68, 0.6);
+            padding: 6px 16px;
+            border-radius: 60px;
+            font-size: 13px;
+            color: #b6cbe5;
+            border: 1px solid rgba(42, 51, 64, 0.3);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-count i {
+            color: #6d8cff;
+        }
+
+        .app-item {
+            background: rgba(24, 34, 46, 0.7);
+            backdrop-filter: blur(5px);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(43, 55, 72, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeIn 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(109, 140, 255, 0.03), transparent);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .app-item:hover::before {
+            opacity: 1;
+        }
+
+        .app-item:hover {
+            border-color: rgba(109, 140, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(30, 42, 58, 0.7);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-12px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .app-info .app-title {
+            font-weight: 600;
+            color: #e8efff;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .app-info .app-title .pin {
+            color: #6d8cff;
+            font-size: 12px;
+        }
+
+        .app-info .app-meta {
+            font-size: 13px;
+            color: #889bb8;
+            margin-top: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .app-info .app-meta i {
+            margin-right: 4px;
+            color: #6d8cff;
+            font-size: 12px;
+        }
+
+        .app-status {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 5px 16px;
+            border-radius: 60px;
+            background: rgba(41, 62, 90, 0.4);
+            color: #b7d0f5;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            border: 1px solid rgba(41, 62, 90, 0.2);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+
+        .app-status.accepted {
+            background: rgba(29, 77, 58, 0.3);
+            color: #8bddb0;
+            border-color: rgba(42, 155, 106, 0.2);
+        }
+
+        .app-status.rejected {
+            background: rgba(77, 42, 42, 0.3);
+            color: #f7a8a8;
+            border-color: rgba(165, 74, 90, 0.2);
+        }
+
+        .app-status.pending {
+            background: rgba(77, 65, 31, 0.3);
+            color: #f5d98b;
+            border-color: rgba(196, 160, 53, 0.2);
+        }
+
+        .empty-state {
+            padding: 50px 20px;
+            text-align: center;
+            color: #7c93b5;
+            font-size: 15px;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+            color: rgba(58, 74, 94, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .empty-state .empty-text {
+            font-weight: 500;
+            color: #a5b9d9;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: linear-gradient(145deg, #141a22, #1a222e);
+            border: 1px solid rgba(42, 51, 64, 0.4);
+            border-radius: 28px;
+            padding: 32px 36px;
+            max-width: 720px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+            animation: modalIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(42, 51, 64, 0.3);
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            color: #d3def5;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+        }
+
+        .modal-header h2 i {
+            color: #6d8cff;
+            filter: drop-shadow(0 0 20px rgba(109, 140, 255, 0.15));
+        }
+
+        .modal-close {
+            background: rgba(42, 51, 64, 0.3);
+            border: none;
+            color: #889bb8;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+            background: rgba(42, 51, 64, 0.6);
+            transform: rotate(90deg);
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #a5b9d9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group label i {
+            color: #6d8cff;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: rgba(28, 39, 54, 0.6);
+            border: 1px solid rgba(48, 64, 90, 0.4);
+            border-radius: 14px;
+            padding: 12px 16px;
+            color: #eef4ff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+            width: 100%;
+            backdrop-filter: blur(5px);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #6d8cff;
+            box-shadow: 0 0 0 4px rgba(109, 140, 255, 0.1);
+            background: rgba(28, 39, 54, 0.8);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #5a6f8a;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .form-check-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 28px;
+            background: rgba(24, 34, 46, 0.4);
+            padding: 14px 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(43, 59, 78, 0.3);
+        }
+
+        .form-check-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #c2d2ed;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .form-check-group label:hover {
+            color: #e8efff;
+        }
+
+        .form-check-group input[type="radio"] {
+            accent-color: #6d8cff;
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+            filter: drop-shadow(0 0 4px rgba(109, 140, 255, 0.2));
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #3f6bb0, #2d5a9e);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 60px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(94, 135, 212, 0.3);
+            margin-top: 6px;
+            align-self: flex-start;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 20px rgba(63, 107, 176, 0.2);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(63, 107, 176, 0.4);
+            background: linear-gradient(135deg, #4a7ac4, #3568b0);
+        }
+
+        .footnote {
+            font-size: 13px;
+            color: #7e93b5;
+            margin-top: 14px;
+            border-top: 1px solid rgba(37, 48, 63, 0.3);
+            padding-top: 14px;
+            line-height: 1.6;
+        }
+
+        .footnote i {
+            margin-right: 6px;
+            color: #6d8cff;
+        }
+
+        /* Стили для просмотра анкеты */
+        .app-detail {
+            background: rgba(24, 34, 46, 0.5);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin: 12px 0 20px 0;
+            border: 1px solid rgba(43, 55, 72, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .app-detail .detail-row {
+            display: flex;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(37, 48, 63, 0.2);
+        }
+
+        .app-detail .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .app-detail .detail-label {
+            color: #889bb8;
+            width: 150px;
+            flex-shrink: 0;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .app-detail .detail-label i {
+            color: #6d8cff;
+            width: 18px;
+        }
+
+        .app-detail .detail-value {
+            color: #e2ebff;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            margin: 18px 0 12px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .admin-actions .btn {
+            padding: 10px 22px;
+            font-size: 13px;
+            border-radius: 60px;
+        }
+
+        .replies-section {
+            margin-top: 18px;
+            border-top: 1px solid rgba(42, 51, 64, 0.3);
+            padding-top: 18px;
+        }
+
+        .replies-section h4 {
+            color: #a5b9d9;
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .replies-section h4 i {
+            color: #6d8cff;
+        }
+
+        .reply-item {
+            background: rgba(16, 23, 31, 0.5);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-left: 3px solid #6d8cff;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .reply-item .reply-author {
+            color: #6d8cff;
+            font-weight: 600;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .reply-item .reply-time {
+            color: #7c93b5;
+            font-size: 11px;
+            margin-left: 10px;
+            font-weight: 400;
+        }
+
+        .reply-item .reply-text {
+            color: #d0def0;
+            margin-top: 5px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .reply-input-area {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .reply-input-area textarea {
+            flex: 1;
+            min-width: 200px;
+            background: rgba(28, 39, 54, 0.6);
+            border: 1px solid rgba(48, 64, 90, 0.4);
+            border-radius: 14px;
+            padding: 12px 16px;
+            color: #eef4ff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            outline: none;
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .reply-input-area textarea:focus {
+            border-color: #6d8cff;
+            box-shadow: 0 0 0 4px rgba(109, 140, 255, 0.1);
+        }
+
+        .reply-input-area .btn-reply {
+            background: linear-gradient(135deg, #3f6bb0, #2d5a9e);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 60px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(94, 135, 212, 0.3);
+            align-self: flex-end;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reply-input-area .btn-reply:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(63, 107, 176, 0.3);
+            background: linear-gradient(135deg, #4a7ac4, #3568b0);
+        }
+
+        .btn-lg {
+            padding: 10px 24px !important;
+            font-size: 14px !important;
+            border-radius: 60px !important;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #1d6b47, #1a5a3e) !important;
+            border-color: rgba(42, 155, 106, 0.3) !important;
+            color: white !important;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #2a8a5a, #1d6b47) !important;
+            box-shadow: 0 8px 30px rgba(29, 107, 71, 0.3) !important;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #5a4a25, #4d411f) !important;
+            border-color: rgba(196, 160, 53, 0.3) !important;
+            color: #f5d98b !important;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #6b5a2a, #5a4a25) !important;
+            box-shadow: 0 8px 30px rgba(196, 160, 53, 0.2) !important;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #6b2f3a, #5a2530) !important;
+            border-color: rgba(165, 74, 90, 0.3) !important;
+            color: white !important;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #8f3f4e, #6b2f3a) !important;
+            box-shadow: 0 8px 30px rgba(107, 47, 58, 0.3) !important;
+        }
+
+        .btn-delete {
+            background: linear-gradient(135deg, #8b2f3a, #7a2530) !important;
+            border-color: rgba(196, 74, 90, 0.3) !important;
+            color: white !important;
+        }
+
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #b03f4e, #8b2f3a) !important;
+            box-shadow: 0 8px 30px rgba(139, 47, 58, 0.3) !important;
+        }
+
+        .view-modal .modal {
+            max-width: 750px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 16px 18px;
+                border-radius: 20px;
+            }
+
+            .modal {
+                padding: 20px 22px;
+                border-radius: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header-actions {
+                justify-content: stretch;
+            }
+
+            .btn-primary {
+                justify-content: center;
+            }
+
+            .app-detail .detail-label {
+                width: 100px;
+                font-size: 13px;
+            }
+
+            .app-detail .detail-value {
+                font-size: 13px;
+            }
+
+            .reply-input-area {
+                flex-direction: column;
+            }
+
+            .reply-input-area .btn-reply {
+                align-self: stretch;
+                justify-content: center;
+            }
+
+            .admin-actions .btn {
+                flex: 1;
+                justify-content: center;
+                font-size: 12px;
+                padding: 8px 14px;
+            }
+
+            .logo h1 {
+                font-size: 22px;
+            }
+
+            .panel-header h3 {
+                font-size: 16px;
+            }
+
+            .app-item {
+                padding: 12px 16px;
+            }
+
+            .app-info .app-title {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .app-detail .detail-label {
+                width: 80px;
+                font-size: 12px;
+            }
+
+            .app-detail .detail-value {
+                font-size: 12px;
+            }
+
+            .app-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .admin-actions {
+                gap: 6px;
+            }
+
+            .admin-actions .btn {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+        }
+
+        /* Скрытие скроллбара для красоты */
+        .modal::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .modal::-webkit-scrollbar-track {
+            background: rgba(16, 23, 31, 0.3);
+            border-radius: 10px;
+        }
+
+        .modal::-webkit-scrollbar-thumb {
+            background: rgba(109, 140, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .modal::-webkit-scrollbar-thumb:hover {
+            background: rgba(109, 140, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="logo">
+                <h1><i class="fas fa-hat-wizard"></i> VordWorld</h1>
+            </div>
+            <div class="header-actions">
+                <button class="btn-primary" id="openModalBtn">
+                    <i class="fas fa-plus"></i> Создать тему
+                </button>
+            </div>
+        </div>
+
+        <!-- СПИСОК ЗАЯВОК -->
+        <div class="applications-panel">
+            <div class="panel-header">
+                <h3><i class="fas fa-file-signature"></i> Заявки на стажёра (HW)</h3>
+                <span class="badge-count" id="badgeCount"><i class="far fa-clock"></i> <span id="countNumber">0</span> активных</span>
+            </div>
+            <div id="applicationsList">
+                <div class="empty-state">
+                    <i class="far fa-file-alt"></i>
+                    <div class="empty-text">Пока нет заявок</div>
+                    <div style="font-size: 13px; margin-top: 4px; color: #5a6f8a;">Нажмите «Создать тему», чтобы подать заявку на стажёра</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ СОЗДАНИЯ ЗАЯВКИ -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-pen-fancy"></i> Подать заявку на стажёра</h2>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label><i class="fas fa-heading"></i> Заголовок темы</label>
+                    <input type="text" id="appTitle" placeholder="Краткий заголовок">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user-tag"></i> Ваш основной ник</label>
+                    <input type="text" id="appNick" placeholder="Ваш ник">
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:12px;">
+                    <div class="form-group" style="flex:1; min-width:120px;">
+                        <label><i class="fas fa-calendar-alt"></i> Полных лет</label>
+                        <input type="number" id="appAge" min="0" max="99" placeholder="Возраст">
+                    </div>
+                    <div class="form-group" style="flex:1; min-width:150px;">
+                        <label><i class="fas fa-check-circle"></i> Готовы уделять время?</label>
+                        <select id="appTime">
+                            <option value="Да">Да</option>
+                            <option value="Нет">Нет</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-desktop"></i> Устройство (FPS 60+)?</label>
+                    <select id="appFps">
+                        <option value="Да">Да</option>
+                        <option value="Нет">Нет</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-user-edit"></i> Немного о себе</label>
+                    <textarea id="appAbout" placeholder="Опыт, почему вы..."></textarea>
+                </div>
+                <div class="form-check-group">
+                    <label><input type="radio" name="cheatBan" value="Нет" checked> Нет</label>
+                    <label><input type="radio" name="cheatBan" value="Да"> Да</label>
+                    <span style="color:#a5b9d9; display:flex; align-items:center; gap:4px;"><i class="fas fa-gavel" style="color:#6d8cff;"></i> Наказания за читы (30 дн)</span>
+                </div>
+                <div class="form-check-group">
+                    <label><input type="radio" name="osAge" value="Да" checked> Да</label>
+                    <label><input type="radio" name="osAge" value="Нет"> Нет</label>
+                    <span style="color:#a5b9d9; display:flex; align-items:center; gap:4px;"><i class="fas fa-clock" style="color:#6d8cff;"></i> ОС > 14 дней</span>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-briefcase"></i> Опыт модерирования</label>
+                    <input type="text" id="appModExp" placeholder="Был модератором на другом сервере">
+                </div>
+                <div class="form-check-group">
+                    <label><input type="radio" name="rules" value="Да" checked> Да</label>
+                    <label><input type="radio" name="rules" value="Нет"> Нет</label>
+                    <span style="color:#a5b9d9; display:flex; align-items:center; gap:4px;"><i class="fas fa-book" style="color:#6d8cff;"></i> Ознакомились с правилами?</span>
+                </div>
+                <button class="btn-submit" id="submitApplicationBtn"><i class="fas fa-paper-plane"></i> Отправить заявку</button>
+                <div class="footnote">
+                    <i class="fas fa-info-circle"></i> Заявки принимаются без ограничений.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ПРОСМОТРА АНКЕТЫ -->
+    <div class="modal-overlay view-modal" id="viewModalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-alt"></i> <span id="viewAppTitle">Просмотр анкеты</span></h2>
+                <button class="modal-close" id="closeViewModalBtn">&times;</button>
+            </div>
+            <div id="viewAppContent">
+                <!-- Заполняется динамически -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Глобальные переменные
+        let isAdmin = false;
+        let userIP = '';
+        let applications = [];
+        let nextId = 1;
+
+        // DOM элементы
+        const modalOverlay = document.getElementById('modalOverlay');
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const submitBtn = document.getElementById('submitApplicationBtn');
+
+        const viewModalOverlay = document.getElementById('viewModalOverlay');
+        const closeViewModalBtn = document.getElementById('closeViewModalBtn');
+        const viewAppTitle = document.getElementById('viewAppTitle');
+        const viewAppContent = document.getElementById('viewAppContent');
+
+        // ========== ФУНКЦИИ РАБОТЫ С LOCALSTORAGE ==========
+        function loadApplications() {
+            try {
+                const saved = localStorage.getItem('vordworld_applications');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    applications = parsed.applications || [];
+                    nextId = parsed.nextId || 1;
+                    console.log('Загружено заявок:', applications.length);
+                }
+            } catch (e) {
+                console.error('Ошибка загрузки заявок:', e);
+            }
+        }
+
+        function saveApplications() {
+            try {
+                localStorage.setItem('vordworld_applications', JSON.stringify({
+                    applications: applications,
+                    nextId: nextId
+                }));
+                console.log('Заявки сохранены, всего:', applications.length);
+            } catch (e) {
+                console.error('Ошибка сохранения заявок:', e);
+            }
+        }
+
+        // ========== ОПРЕДЕЛЕНИЕ АДМИНА ==========
+        async function checkAdminStatus() {
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const data = await response.json();
+                userIP = data.ip;
+                console.log('Ваш IP:', userIP);
+
+                const adminIPs = ['5.165.104.8', '127.0.0.1', '::1', '192.168.1.1'];
+                isAdmin = adminIPs.includes(userIP);
+
+                if (isAdmin) {
+                    console.log('✅ Вы АДМИНИСТРАТОР!');
+                } else {
+                    console.log('❌ Вы обычный пользователь');
+                }
+
+                renderApplications();
+            } catch (error) {
+                console.error('Ошибка получения IP:', error);
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    isAdmin = true;
+                    renderApplications();
+                }
+            }
+        }
+
+        // ========== РЕНДЕР ЗАЯВОК ==========
+        function renderApplications() {
+            const container = document.getElementById('applicationsList');
+            const countNumber = document.getElementById('countNumber');
+            if (!container) return;
+
+            if (applications.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="far fa-file-alt"></i>
+                        <div class="empty-text">Пока нет заявок</div>
+                        <div style="font-size: 13px; margin-top: 4px; color: #5a6f8a;">Нажмите «Создать тему», чтобы подать заявку на стажёра</div>
+                    </div>
+                `;
+                if (countNumber) countNumber.textContent = '0';
+                return;
+            }
+
+            let html = '';
+            let pendingCount = 0;
+
+            applications.forEach(app => {
+                if (app.status === 'pending') pendingCount++;
+
+                let statusClass = 'pending';
+                let statusText = 'НА РАССМОТРЕНИИ';
+                if (app.status === 'accepted') {
+                    statusClass = 'accepted';
+                    statusText = 'ПРИНЯТО';
+                } else if (app.status === 'rejected') {
+                    statusClass = 'rejected';
+                    statusText = 'ОТКЛОНЕНО';
+                }
+
+                html += `
+                    <div class="app-item" data-id="${app.id}" onclick="openViewModal(${app.id})">
+                        <div class="app-info">
+                            <div class="app-title">
+                                <span class="pin"><i class="fas fa-pin"></i></span>
+                                ${app.title || 'Без заголовка'}
+                            </div>
+                            <div class="app-meta">
+                                <span><i class="fas fa-user"></i> ${app.author || 'Неизвестный'}</span>
+                                <span><i class="far fa-clock"></i> ${app.time || 'Неизвестно'}</span>
+                                <span><i class="far fa-comment"></i> ${(app.replies && app.replies.length) || 0} ответов</span>
+                                <span><i class="far fa-eye"></i> ${app.views || 0} просмотров</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="app-status ${statusClass}">${statusText}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            if (countNumber) countNumber.textContent = pendingCount;
+        }
+
+        // ========== ОТКРЫТИЕ ПРОСМОТРА АНКЕТЫ ==========
+        function openViewModal(appId) {
+            const app = applications.find(a => a.id === appId);
+            if (!app) {
+                return;
+            }
+
+            viewAppTitle.textContent = app.title || 'Просмотр анкеты';
+
+            let statusText = 'НА РАССМОТРЕНИИ';
+            let statusColor = '#f5d98b';
+            let statusIcon = 'fa-clock';
+            if (app.status === 'accepted') {
+                statusText = 'ПРИНЯТО';
+                statusColor = '#8bddb0';
+                statusIcon = 'fa-check-circle';
+            } else if (app.status === 'rejected') {
+                statusText = 'ОТКЛОНЕНО';
+                statusColor = '#f7a8a8';
+                statusIcon = 'fa-times-circle';
+            }
+
+            // Формируем ответы
+            let repliesHtml = '';
+            if (app.replies && app.replies.length > 0) {
+                repliesHtml = `<div class="replies-section"><h4><i class="fas fa-comments"></i> Ответы администрации</h4>`;
+                app.replies.forEach(reply => {
+                    repliesHtml += `
+                        <div class="reply-item">
+                            <div class="reply-author"><i class="fas fa-user-shield"></i> ${reply.author} <span class="reply-time">${reply.time}</span></div>
+                            <div class="reply-text">${reply.text}</div>
+                        </div>
+                    `;
+                });
+                repliesHtml += `</div>`;
+            }
+
+            let html = `
+                <div class="app-detail">
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-heading"></i> Заголовок</span>
+                        <span class="detail-value">${app.title || 'Без заголовка'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-user"></i> Автор</span>
+                        <span class="detail-value">${app.author || 'Неизвестный'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-calendar-alt"></i> Возраст</span>
+                        <span class="detail-value">${app.age || 'Не указан'} лет</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-clock"></i> Время подачи</span>
+                        <span class="detail-value">${app.time || 'Неизвестно'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-info-circle"></i> Статус</span>
+                        <span class="detail-value" style="color: ${statusColor}; font-weight: 600;"><i class="fas ${statusIcon}"></i> ${statusText}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-user-edit"></i> О себе</span>
+                        <span class="detail-value">${app.about || 'Не указано'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-briefcase"></i> Опыт модерирования</span>
+                        <span class="detail-value">${app.modExp || 'Не указан'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-gavel"></i> Наказания за читы</span>
+                        <span class="detail-value">${app.cheatBan || 'Нет'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-clock"></i> ОС > 14 дней</span>
+                        <span class="detail-value">${app.osAge || 'Да'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-book"></i> Правила</span>
+                        <span class="detail-value">${app.rules || 'Да'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-check-circle"></i> Готов уделять время</span>
+                        <span class="detail-value">${app.timeReady || 'Да'}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="detail-label"><i class="fas fa-desktop"></i> FPS 60+</span>
+                        <span class="detail-value">${app.fps || 'Да'}</span>
+                    </div>
+                </div>
+            `;
+
+            // Если админ - показываем кнопки управления и поле для ответа
+            if (isAdmin) {
+                html += `
+                    <div class="admin-actions">
+                        <button class="btn btn-success btn-lg" onclick="changeStatus(${app.id}, 'accepted')">
+                            <i class="fas fa-check"></i> Принять
+                        </button>
+                        <button class="btn btn-warning btn-lg" onclick="changeStatus(${app.id}, 'pending')">
+                            <i class="fas fa-clock"></i> На рассмотрение
+                        </button>
+                        <button class="btn btn-danger btn-lg" onclick="changeStatus(${app.id}, 'rejected')">
+                            <i class="fas fa-times"></i> Отклонить
+                        </button>
+                        <button class="btn btn-delete btn-lg" onclick="deleteApplication(${app.id})">
+                            <i class="fas fa-trash"></i> Удалить
+                        </button>
+                    </div>
+                    <div class="replies-section">
+                        <h4><i class="fas fa-reply"></i> Ответ администратора</h4>
+                        ${repliesHtml}
+                        <div class="reply-input-area">
+                            <textarea id="adminReplyText" placeholder="Напишите ответ на заявку..."></textarea>
+                            <button class="btn-reply" onclick="sendReply(${app.id})">
+                                <i class="fas fa-paper-plane"></i> Отправить
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Для обычных пользователей показываем только ответы
+                if (app.replies && app.replies.length > 0) {
+                    html += `<div class="replies-section"><h4><i class="fas fa-comments"></i> Ответы администрации</h4>${repliesHtml}</div>`;
+                }
+            }
+
+            viewAppContent.innerHTML = html;
+            viewModalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // ========== УДАЛЕНИЕ АНКЕТЫ ==========
+        function deleteApplication(appId) {
+            if (!confirm('Вы уверены, что хотите удалить эту анкету? Это действие нельзя отменить!')) {
+                return;
+            }
+
+            const index = applications.findIndex(a => a.id === appId);
+            if (index === -1) return;
+
+            applications.splice(index, 1);
+            saveApplications();
+            renderApplications();
+            closeViewModal();
+        }
+
+        // ========== ОТПРАВКА ОТВЕТА ==========
+        function sendReply(appId) {
+            const textarea = document.getElementById('adminReplyText');
+            if (!textarea) return;
+            
+            const text = textarea.value.trim();
+            if (!text) {
+                return;
+            }
+
+            const app = applications.find(a => a.id === appId);
+            if (!app) return;
+
+            if (!app.replies) app.replies = [];
+
+            const now = new Date();
+            const timeStr = now.toLocaleString('ru-RU', {
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            app.replies.push({
+                author: 'Администратор',
+                text: text,
+                time: timeStr
+            });
+
+            saveApplications();
+            renderApplications();
+            openViewModal(appId);
+        }
+
+        // ========== ИЗМЕНЕНИЕ СТАТУСА ==========
+        function changeStatus(appId, newStatus) {
+            const app = applications.find(a => a.id === appId);
+            if (!app) return;
+
+            app.status = newStatus;
+            saveApplications();
+            renderApplications();
+            openViewModal(appId);
+        }
+
+        // ========== ЗАКРЫТИЕ МОДАЛКИ ПРОСМОТРА ==========
+        function closeViewModal() {
+            viewModalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ========== ОТПРАВКА ЗАЯВКИ ==========
+        function submitApplication() {
+            const title = document.getElementById('appTitle').value.trim() || 'Без заголовка';
+            const nick = document.getElementById('appNick').value.trim() || 'Неизвестный';
+            const ageInput = document.getElementById('appAge');
+            const age = parseInt(ageInput.value) || 0;
+            const about = document.getElementById('appAbout').value.trim() || 'Не указано';
+            const modExp = document.getElementById('appModExp').value.trim() || 'Не указан';
+            const timeReady = document.getElementById('appTime').value;
+            const fps = document.getElementById('appFps').value;
+            const cheatBan = document.querySelector('input[name="cheatBan"]:checked')?.value || 'Нет';
+            const osAge = document.querySelector('input[name="osAge"]:checked')?.value || 'Да';
+            const rules = document.querySelector('input[name="rules"]:checked')?.value || 'Да';
+
+            const now = new Date();
+            const timeStr = now.toLocaleString('ru-RU', {
+                day: 'numeric',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+
+            const newApp = {
+                id: nextId++,
+                title: title,
+                author: nick,
+                age: age,
+                about: about,
+                modExp: modExp,
+                timeReady: timeReady,
+                fps: fps,
+                cheatBan: cheatBan,
+                osAge: osAge,
+                rules: rules,
+                status: 'pending',
+                time: timeStr,
+                replies: [],
+                views: 0
+            };
+
+            applications.unshift(newApp);
+            saveApplications();
+
+            document.getElementById('appTitle').value = '';
+            document.getElementById('appNick').value = '';
+            ageInput.value = '';
+            document.getElementById('appAbout').value = '';
+            document.getElementById('appModExp').value = '';
+
+            closeModal();
+            renderApplications();
+        }
+
+        // ========== УПРАВЛЕНИЕ МОДАЛКОЙ СОЗДАНИЯ ==========
+        function openModal() {
+            modalOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ========== НАЗНАЧЕНИЕ ОБРАБОТЧИКОВ ==========
+        openModalBtn.addEventListener('click', openModal);
+        closeModalBtn.addEventListener('click', closeModal);
+
+        modalOverlay.addEventListener('click', function(e) {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        viewModalOverlay.addEventListener('click', function(e) {
+            if (e.target === viewModalOverlay) closeViewModal();
+        });
+
+        closeViewModalBtn.addEventListener('click', closeViewModal);
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeViewModal();
+            }
+        });
+
+        submitBtn.addEventListener('click', submitApplication);
+
+        document.querySelectorAll('#appTitle, #appNick, #appAge, #appAbout, #appModExp').forEach(field => {
+            field.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    submitApplication();
+                }
+            });
+        });
+
+        // ========== ИНИЦИАЛИЗАЦИЯ ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Страница загружена!');
+            loadApplications();
+            checkAdminStatus();
+
+            if (applications.length === 0) {
+                renderApplications();
+            } else {
+                renderApplications();
+            }
+        });
+    </script>
+</body>
+</html>
