@@ -116,48 +116,55 @@
             transform: translateY(0px);
         }
 
-        .btn-secondary {
-            background: rgba(42, 51, 64, 0.4);
-            border: 1px solid rgba(42, 51, 64, 0.3);
-            color: #b6cbe5;
-            font-weight: 500;
-            padding: 10px 18px;
-            border-radius: 60px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .sync-status {
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 13px;
+            color: #889bb8;
+            padding: 4px 12px;
+            border-radius: 60px;
+            background: rgba(41, 54, 68, 0.3);
         }
 
-        .btn-secondary:hover {
-            background: rgba(42, 51, 64, 0.6);
-            border-color: rgba(109, 140, 255, 0.3);
-            color: #fff;
-            transform: translateY(-2px);
+        .sync-status .online { color: #8bddb0; }
+        .sync-status .offline { color: #f7a8a8; }
+        .sync-status .syncing { color: #f5d98b; animation: pulse 1s ease-in-out infinite; }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
-        .btn-success-small {
-            background: rgba(29, 107, 71, 0.3);
-            border: 1px solid rgba(42, 155, 106, 0.2);
+        .gist-setup {
+            background: rgba(41, 128, 185, 0.08);
+            border: 1px solid rgba(41, 128, 185, 0.15);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .gist-setup .info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #a5b9d9;
+            font-size: 14px;
+        }
+
+        .gist-setup .info i {
+            color: #6d8cff;
+            font-size: 20px;
+        }
+
+        .gist-setup .status-text {
             color: #8bddb0;
-        }
-
-        .btn-success-small:hover {
-            background: rgba(29, 107, 71, 0.5);
-            border-color: rgba(42, 155, 106, 0.4);
-        }
-
-        .btn-warning-small {
-            background: rgba(196, 160, 53, 0.2);
-            border: 1px solid rgba(196, 160, 53, 0.2);
-            color: #f5d98b;
-        }
-
-        .btn-warning-small:hover {
-            background: rgba(196, 160, 53, 0.35);
-            border-color: rgba(196, 160, 53, 0.4);
+            font-weight: 500;
         }
 
         .applications-panel {
@@ -195,12 +202,6 @@
             color: #6d8cff;
             font-size: 20px;
             filter: drop-shadow(0 0 12px rgba(109, 140, 255, 0.15));
-        }
-
-        .panel-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
         }
 
         .badge-count {
@@ -263,14 +264,8 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-12px) scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(-12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .app-info .app-title {
@@ -316,23 +311,9 @@
             transition: all 0.3s ease;
         }
 
-        .app-status.accepted {
-            background: rgba(29, 77, 58, 0.3);
-            color: #8bddb0;
-            border-color: rgba(42, 155, 106, 0.2);
-        }
-
-        .app-status.rejected {
-            background: rgba(77, 42, 42, 0.3);
-            color: #f7a8a8;
-            border-color: rgba(165, 74, 90, 0.2);
-        }
-
-        .app-status.pending {
-            background: rgba(77, 65, 31, 0.3);
-            color: #f5d98b;
-            border-color: rgba(196, 160, 53, 0.2);
-        }
+        .app-status.accepted { background: rgba(29, 77, 58, 0.3); color: #8bddb0; border-color: rgba(42, 155, 106, 0.2); }
+        .app-status.rejected { background: rgba(77, 42, 42, 0.3); color: #f7a8a8; border-color: rgba(165, 74, 90, 0.2); }
+        .app-status.pending { background: rgba(77, 65, 31, 0.3); color: #f5d98b; border-color: rgba(196, 160, 53, 0.2); }
 
         .empty-state {
             padding: 50px 20px;
@@ -392,14 +373,8 @@
         }
 
         @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: scale(0.92) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+            from { opacity: 0; transform: scale(0.92) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .modal-header {
@@ -829,10 +804,6 @@
             font-size: 13px;
         }
 
-        #fileInput {
-            display: none;
-        }
-
         .toast {
             position: fixed;
             bottom: 30px;
@@ -864,143 +835,41 @@
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) translateY(0);
-            }
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
         @media (max-width: 600px) {
-            .container {
-                padding: 16px 18px;
-                border-radius: 20px;
-            }
-
-            .modal {
-                padding: 20px 22px;
-                border-radius: 20px;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .header-actions {
-                justify-content: stretch;
-            }
-
-            .btn-primary {
-                justify-content: center;
-            }
-
-            .app-detail .detail-label {
-                width: 100px;
-                font-size: 13px;
-            }
-
-            .app-detail .detail-value {
-                font-size: 13px;
-            }
-
-            .reply-input-area {
-                flex-direction: column;
-            }
-
-            .reply-input-area .btn-reply {
-                align-self: stretch;
-                justify-content: center;
-            }
-
-            .admin-actions .btn {
-                flex: 1;
-                justify-content: center;
-                font-size: 12px;
-                padding: 8px 14px;
-            }
-
-            .logo h1 {
-                font-size: 22px;
-            }
-
-            .panel-header h3 {
-                font-size: 16px;
-            }
-
-            .app-item {
-                padding: 12px 16px;
-            }
-
-            .app-info .app-title {
-                font-size: 14px;
-            }
-
-            .footer {
-                flex-direction: column;
-                gap: 8px;
-                text-align: center;
-            }
-
-            .panel-actions {
-                width: 100%;
-                justify-content: stretch;
-            }
-
-            .panel-actions .btn-secondary {
-                flex: 1;
-                justify-content: center;
-                font-size: 12px;
-                padding: 8px 12px;
-            }
+            .container { padding: 16px 18px; border-radius: 20px; }
+            .modal { padding: 20px 22px; border-radius: 20px; }
+            .header { flex-direction: column; align-items: stretch; }
+            .header-actions { justify-content: stretch; }
+            .btn-primary { justify-content: center; }
+            .app-detail .detail-label { width: 100px; font-size: 13px; }
+            .app-detail .detail-value { font-size: 13px; }
+            .reply-input-area { flex-direction: column; }
+            .reply-input-area .btn-reply { align-self: stretch; justify-content: center; }
+            .admin-actions .btn { flex: 1; justify-content: center; font-size: 12px; padding: 8px 14px; }
+            .logo h1 { font-size: 22px; }
+            .panel-header h3 { font-size: 16px; }
+            .app-item { padding: 12px 16px; }
+            .app-info .app-title { font-size: 14px; }
+            .footer { flex-direction: column; gap: 8px; text-align: center; }
+            .gist-setup { flex-direction: column; align-items: stretch; text-align: center; }
         }
 
         @media (max-width: 480px) {
-            .app-detail .detail-label {
-                width: 80px;
-                font-size: 12px;
-            }
-
-            .app-detail .detail-value {
-                font-size: 12px;
-            }
-
-            .app-item {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 8px;
-            }
-
-            .admin-actions {
-                gap: 6px;
-            }
-
-            .admin-actions .btn {
-                font-size: 11px;
-                padding: 6px 12px;
-            }
+            .app-detail .detail-label { width: 80px; font-size: 12px; }
+            .app-detail .detail-value { font-size: 12px; }
+            .app-item { flex-direction: column; align-items: stretch; gap: 8px; }
+            .admin-actions { gap: 6px; }
+            .admin-actions .btn { font-size: 11px; padding: 6px 12px; }
         }
 
-        .modal::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .modal::-webkit-scrollbar-track {
-            background: rgba(16, 23, 31, 0.3);
-            border-radius: 10px;
-        }
-
-        .modal::-webkit-scrollbar-thumb {
-            background: rgba(109, 140, 255, 0.3);
-            border-radius: 10px;
-        }
-
-        .modal::-webkit-scrollbar-thumb:hover {
-            background: rgba(109, 140, 255, 0.5);
-        }
+        .modal::-webkit-scrollbar { width: 6px; }
+        .modal::-webkit-scrollbar-track { background: rgba(16, 23, 31, 0.3); border-radius: 10px; }
+        .modal::-webkit-scrollbar-thumb { background: rgba(109, 140, 255, 0.3); border-radius: 10px; }
+        .modal::-webkit-scrollbar-thumb:hover { background: rgba(109, 140, 255, 0.5); }
     </style>
 </head>
 <body>
@@ -1012,9 +881,25 @@
                 <h1><i class="fas fa-hat-wizard"></i> VordWorld</h1>
             </div>
             <div class="header-actions">
+                <span class="sync-status" id="syncStatus">
+                    <i class="fas fa-circle online"></i>
+                    <span id="syncText">Синхронизация через Gist</span>
+                </span>
                 <button class="btn-primary" id="openModalBtn">
                     <i class="fas fa-plus"></i> Создать тему
                 </button>
+            </div>
+        </div>
+
+        <!-- СТАТУС GIST (уже настроен) -->
+        <div class="gist-setup">
+            <div class="info">
+                <i class="fab fa-github"></i>
+                <span>Синхронизация через GitHub Gist: <span class="status-text">✅ Подключено</span></span>
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; font-size:13px; color:#889bb8;">
+                <span><i class="fas fa-check-circle" style="color:#8bddb0;"></i> ID: f7faac5...</span>
+                <span><i class="fas fa-sync-alt" style="color:#6d8cff;"></i> Обновление: каждые 10 сек</span>
             </div>
         </div>
 
@@ -1022,21 +907,7 @@
         <div class="applications-panel">
             <div class="panel-header">
                 <h3><i class="fas fa-file-signature"></i> Заявки на стажёра (HW)</h3>
-                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-                    <span class="badge-count" id="badgeCount"><i class="far fa-clock"></i> <span id="countNumber">0</span> активных</span>
-                </div>
-            </div>
-            <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
-                <button class="btn-secondary btn-success-small" onclick="exportData()">
-                    <i class="fas fa-download"></i> Экспорт
-                </button>
-                <button class="btn-secondary btn-warning-small" onclick="document.getElementById('fileInput').click()">
-                    <i class="fas fa-upload"></i> Импорт
-                </button>
-                <input type="file" id="fileInput" accept=".json" onchange="importData(event)">
-                <button class="btn-secondary" onclick="clearAllData()" style="border-color: rgba(165,74,90,0.3); color:#f7a8a8;">
-                    <i class="fas fa-trash"></i> Очистить всё
-                </button>
+                <span class="badge-count" id="badgeCount"><i class="far fa-clock"></i> <span id="countNumber">0</span> активных</span>
             </div>
             <div id="applicationsList">
                 <div class="empty-state">
@@ -1047,7 +918,7 @@
             </div>
         </div>
 
-        <!-- ФУТЕР СО ССЫЛКОЙ НА ПРАВИЛА -->
+        <!-- ФУТЕР -->
         <div class="footer">
             <span class="footer-text"><i class="fas fa-gavel"></i> Ознакомьтесь с правилами сервера</span>
             <a href="https://sashka123485.github.io/Magicworld/" target="_blank">
@@ -1056,7 +927,7 @@
         </div>
     </div>
 
-    <!-- Toast уведомление -->
+    <!-- Toast -->
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
         <span id="toastMessage">Готово!</span>
@@ -1069,7 +940,6 @@
                 <h2><i class="fas fa-pen-fancy"></i> Подать заявку на стажёра</h2>
                 <button class="modal-close" id="closeModalBtn">&times;</button>
             </div>
-
             <div class="form-row">
                 <div class="form-group">
                     <label><i class="fas fa-heading"></i> Заголовок темы</label>
@@ -1124,7 +994,7 @@
                 </div>
                 <button class="btn-submit" id="submitApplicationBtn"><i class="fas fa-paper-plane"></i> Отправить заявку</button>
                 <div class="footnote">
-                    <i class="fas fa-info-circle"></i> Заявки принимаются без ограничений.
+                    <i class="fas fa-info-circle"></i> Заявки автоматически синхронизируются между всеми устройствами через GitHub Gist.
                 </div>
             </div>
         </div>
@@ -1137,45 +1007,47 @@
                 <h2><i class="fas fa-file-alt"></i> <span id="viewAppTitle">Просмотр анкеты</span></h2>
                 <button class="modal-close" id="closeViewModalBtn">&times;</button>
             </div>
-            <div id="viewAppContent">
-                <!-- Заполняется динамически -->
-            </div>
+            <div id="viewAppContent"></div>
         </div>
     </div>
 
     <script>
-        // Глобальные переменные
+        // ========== ВАШИ ДАННЫЕ ДЛЯ СИНХРОНИЗАЦИИ ==========
+        const GIST_ID = 'f7faac50fcb55772b924c93c65aa115a';
+        const GITHUB_TOKEN = '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';
+
+        // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
         let isAdmin = false;
         let userIP = '';
         let applications = [];
         let nextId = 1;
+        let syncInterval = null;
+        let isSyncing = false;
 
         // DOM элементы
         const modalOverlay = document.getElementById('modalOverlay');
         const openModalBtn = document.getElementById('openModalBtn');
         const closeModalBtn = document.getElementById('closeModalBtn');
         const submitBtn = document.getElementById('submitApplicationBtn');
-
         const viewModalOverlay = document.getElementById('viewModalOverlay');
         const closeViewModalBtn = document.getElementById('closeViewModalBtn');
         const viewAppTitle = document.getElementById('viewAppTitle');
         const viewAppContent = document.getElementById('viewAppContent');
-
         const toast = document.getElementById('toast');
         const toastMessage = document.getElementById('toastMessage');
+        const syncStatus = document.getElementById('syncStatus');
+        const syncText = document.getElementById('syncText');
 
-        // ========== TOAST УВЕДОМЛЕНИЕ ==========
+        // ========== TOAST ==========
         function showToast(message, isError = false) {
             toastMessage.textContent = message;
             toast.className = 'toast show';
             if (isError) toast.classList.add('error');
             clearTimeout(toast._timeout);
-            toast._timeout = setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
+            toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // ========== РАБОТА С LOCALSTORAGE ==========
+        // ========== LOCAL STORAGE ==========
         function loadFromLocalStorage() {
             try {
                 const saved = localStorage.getItem('vordworld_applications');
@@ -1183,13 +1055,9 @@
                     const parsed = JSON.parse(saved);
                     applications = parsed.applications || [];
                     nextId = parsed.nextId || 1;
-                    console.log('Загружено из localStorage:', applications.length);
-                    renderApplications();
                     return true;
                 }
-            } catch (e) {
-                console.error('Ошибка загрузки:', e);
-            }
+            } catch (e) {}
             return false;
         }
 
@@ -1199,109 +1067,165 @@
                     applications: applications,
                     nextId: nextId
                 }));
-                console.log('Сохранено в localStorage, всего:', applications.length);
                 return true;
+            } catch (e) { return false; }
+        }
+
+        // ========== GITHUB GIST ==========
+        async function syncFromGist() {
+            if (isSyncing) return;
+            isSyncing = true;
+
+            try {
+                const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+
+                if (!response.ok) {
+                    updateSyncStatus('offline', 'Ошибка синхронизации');
+                    isSyncing = false;
+                    return;
+                }
+
+                const data = await response.json();
+                const files = data.files || {};
+                const dataFile = files['vordworld_data.json'] || files['data.json'];
+                
+                if (!dataFile) {
+                    await createGistFile();
+                    isSyncing = false;
+                    return;
+                }
+
+                const content = dataFile.content;
+                if (!content) {
+                    isSyncing = false;
+                    return;
+                }
+
+                const parsed = JSON.parse(content);
+                const remoteApps = parsed.applications || [];
+                const remoteNextId = parsed.nextId || 1;
+
+                // Объединяем заявки
+                let newApps = 0;
+                remoteApps.forEach(remoteApp => {
+                    const exists = applications.some(a => a.id === remoteApp.id);
+                    if (!exists) {
+                        applications.push(remoteApp);
+                        newApps++;
+                    }
+                });
+
+                if (remoteNextId > nextId) {
+                    nextId = remoteNextId;
+                }
+
+                if (newApps > 0) {
+                    saveToLocalStorage();
+                    renderApplications();
+                    showToast(`📥 Загружено ${newApps} новых заявок`);
+                }
+
+                updateSyncStatus('online', 'Синхронизация через Gist');
+
+            } catch (error) {
+                console.error('Ошибка синхронизации:', error);
+                updateSyncStatus('offline', 'Ошибка синхронизации');
+            }
+
+            isSyncing = false;
+        }
+
+        async function createGistFile() {
+            try {
+                const initData = { applications: [], nextId: 1 };
+                const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        files: {
+                            'vordworld_data.json': {
+                                content: JSON.stringify(initData, null, 2)
+                            }
+                        }
+                    })
+                });
+                return response.ok;
             } catch (e) {
-                console.error('Ошибка сохранения:', e);
                 return false;
             }
         }
 
-        // ========== ЭКСПОРТ ==========
-        function exportData() {
-            if (applications.length === 0) {
-                showToast('Нет заявок для экспорта', true);
-                return;
-            }
+        async function pushToGist() {
+            if (isSyncing) return;
+            isSyncing = true;
 
-            const data = {
-                applications: applications,
-                nextId: nextId,
-                exportedAt: new Date().toISOString(),
-                version: '1.0'
-            };
+            try {
+                const data = {
+                    applications: applications,
+                    nextId: nextId
+                };
 
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `vordworld_applications_${new Date().toISOString().slice(0,10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            showToast(`✅ Экспортировано ${applications.length} заявок`);
-        }
-
-        // ========== ИМПОРТ ==========
-        function importData(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    if (!data.applications || !Array.isArray(data.applications)) {
-                        showToast('❌ Неверный формат файла', true);
-                        return;
-                    }
-
-                    if (data.applications.length === 0) {
-                        showToast('❌ Файл пуст', true);
-                        return;
-                    }
-
-                    // Подтверждение перед импортом
-                    if (!confirm(`Импортировать ${data.applications.length} заявок? Текущие заявки будут объединены.`)) {
-                        return;
-                    }
-
-                    // Объединение: добавляем только те, которых нет
-                    let imported = 0;
-                    data.applications.forEach(app => {
-                        // Проверяем, есть ли уже такая заявка (по ID)
-                        const exists = applications.some(a => a.id === app.id);
-                        if (!exists) {
-                            applications.push(app);
-                            imported++;
+                const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        files: {
+                            'vordworld_data.json': {
+                                content: JSON.stringify(data, null, 2)
+                            }
                         }
-                    });
+                    })
+                });
 
-                    // Обновляем nextId
-                    if (data.nextId && data.nextId > nextId) {
-                        nextId = data.nextId;
-                    }
-
-                    saveToLocalStorage();
-                    renderApplications();
-                    showToast(`✅ Импортировано ${imported} новых заявок (всего: ${applications.length})`);
-                } catch (error) {
-                    showToast('❌ Ошибка чтения файла: ' + error.message, true);
+                if (response.ok) {
+                    updateSyncStatus('online', 'Синхронизация через Gist');
+                } else {
+                    updateSyncStatus('offline', 'Ошибка синхронизации');
                 }
-            };
-            reader.readAsText(file);
-            event.target.value = '';
+
+            } catch (error) {
+                console.error('Ошибка отправки в Gist:', error);
+                updateSyncStatus('offline', 'Ошибка синхронизации');
+            }
+
+            isSyncing = false;
         }
 
-        // ========== ОЧИСТКА ВСЕХ ДАННЫХ ==========
-        function clearAllData() {
-            if (applications.length === 0) {
-                showToast('Нет заявок для удаления', true);
-                return;
-            }
+        function startSync() {
+            if (syncInterval) clearInterval(syncInterval);
+            syncInterval = setInterval(() => {
+                syncFromGist();
+            }, 10000);
+        }
 
-            if (!confirm(`Вы уверены, что хотите удалить все ${applications.length} заявок? Это действие нельзя отменить!`)) {
-                return;
+        function updateSyncStatus(status, text) {
+            syncStatus.className = 'sync-status';
+            const icon = syncStatus.querySelector('i');
+            const span = syncStatus.querySelector('span');
+            
+            if (status === 'online') {
+                icon.className = 'fas fa-circle online';
+                span.textContent = text || 'Синхронизировано';
+            } else if (status === 'offline') {
+                icon.className = 'fas fa-circle offline';
+                span.textContent = text || 'Не синхронизировано';
+            } else if (status === 'syncing') {
+                icon.className = 'fas fa-circle syncing';
+                span.textContent = text || 'Синхронизация...';
             }
-
-            applications = [];
-            nextId = 1;
-            saveToLocalStorage();
-            renderApplications();
-            showToast('🗑️ Все заявки удалены');
         }
 
         // ========== ОПРЕДЕЛЕНИЕ АДМИНА ==========
@@ -1314,12 +1238,6 @@
 
                 const adminIPs = ['5.165.104.8', '127.0.0.1', '::1', '192.168.1.1'];
                 isAdmin = adminIPs.includes(userIP);
-
-                if (isAdmin) {
-                    console.log('✅ Вы АДМИНИСТРАТОР!');
-                } else {
-                    console.log('❌ Вы обычный пользователь');
-                }
 
                 renderApplications();
             } catch (error) {
@@ -1393,9 +1311,7 @@
         // ========== ОТКРЫТИЕ ПРОСМОТРА АНКЕТЫ ==========
         function openViewModal(appId) {
             const app = applications.find(a => a.id === appId);
-            if (!app) {
-                return;
-            }
+            if (!app) return;
 
             viewAppTitle.textContent = app.title || 'Просмотр анкеты';
 
@@ -1517,24 +1433,23 @@
             document.body.style.overflow = 'hidden';
         }
 
-        // ========== УДАЛЕНИЕ АНКЕТЫ ==========
-        function deleteApplication(appId) {
-            if (!confirm('Вы уверены, что хотите удалить эту анкету? Это действие нельзя отменить!')) {
-                return;
-            }
+        // ========== УДАЛЕНИЕ ==========
+        async function deleteApplication(appId) {
+            if (!confirm('Вы уверены, что хотите удалить эту анкету?')) return;
 
             const index = applications.findIndex(a => a.id === appId);
             if (index === -1) return;
 
             applications.splice(index, 1);
             saveToLocalStorage();
+            await pushToGist();
             renderApplications();
             closeViewModal();
             showToast('🗑️ Анкета удалена');
         }
 
-        // ========== ОТПРАВКА ОТВЕТА ==========
-        function sendReply(appId) {
+        // ========== ОТВЕТ ==========
+        async function sendReply(appId) {
             const textarea = document.getElementById('adminReplyText');
             if (!textarea) return;
             
@@ -1564,18 +1479,20 @@
             });
 
             saveToLocalStorage();
+            await pushToGist();
             renderApplications();
             openViewModal(appId);
             showToast('✅ Ответ отправлен');
         }
 
-        // ========== ИЗМЕНЕНИЕ СТАТУСА ==========
-        function changeStatus(appId, newStatus) {
+        // ========== СМЕНА СТАТУСА ==========
+        async function changeStatus(appId, newStatus) {
             const app = applications.find(a => a.id === appId);
             if (!app) return;
 
             app.status = newStatus;
             saveToLocalStorage();
+            await pushToGist();
             renderApplications();
             openViewModal(appId);
             
@@ -1587,14 +1504,14 @@
             showToast(`✅ Статус изменён на "${statusText}"`);
         }
 
-        // ========== ЗАКРЫТИЕ МОДАЛКИ ПРОСМОТРА ==========
+        // ========== ЗАКРЫТИЕ ПРОСМОТРА ==========
         function closeViewModal() {
             viewModalOverlay.classList.remove('active');
             document.body.style.overflow = '';
         }
 
         // ========== ОТПРАВКА ЗАЯВКИ ==========
-        function submitApplication() {
+        async function submitApplication() {
             const title = document.getElementById('appTitle').value.trim() || 'Без заголовка';
             const nick = document.getElementById('appNick').value.trim() || 'Неизвестный';
             const ageInput = document.getElementById('appAge');
@@ -1635,6 +1552,7 @@
 
             applications.unshift(newApp);
             saveToLocalStorage();
+            await pushToGist();
 
             document.getElementById('appTitle').value = '';
             document.getElementById('appNick').value = '';
@@ -1647,7 +1565,7 @@
             showToast('✅ Заявка успешно подана!');
         }
 
-        // ========== УПРАВЛЕНИЕ МОДАЛКОЙ СОЗДАНИЯ ==========
+        // ========== МОДАЛКИ ==========
         function openModal() {
             modalOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1658,7 +1576,7 @@
             document.body.style.overflow = '';
         }
 
-        // ========== НАЗНАЧЕНИЕ ОБРАБОТЧИКОВ ==========
+        // ========== ОБРАБОТЧИКИ ==========
         openModalBtn.addEventListener('click', openModal);
         closeModalBtn.addEventListener('click', closeModal);
 
@@ -1693,13 +1611,19 @@
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 VordWorld загружен!');
+            console.log('📡 Gist ID:', GIST_ID);
+            console.log('🔑 Токен GitHub:', GITHUB_TOKEN ? '✅ Установлен' : '❌ Отсутствует');
             
-            // Пытаемся загрузить из localStorage
-            if (!loadFromLocalStorage()) {
-                renderApplications();
-            }
-            
+            loadFromLocalStorage();
+            renderApplications();
             checkAdminStatus();
+            
+            // Запускаем синхронизацию
+            updateSyncStatus('syncing', 'Подключение к Gist...');
+            setTimeout(async () => {
+                await syncFromGist();
+                startSync();
+            }, 500);
         });
     </script>
 </body>
