@@ -50,17 +50,6 @@
             z-index: 1;
         }
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid rgba(42, 51, 64, 0.4);
-            padding-bottom: 20px;
-            margin-bottom: 26px;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
         .logo h1 {
             font-size: 28px;
             font-weight: 800;
@@ -72,6 +61,9 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(42, 51, 64, 0.4);
+            padding-bottom: 20px;
         }
 
         .logo h1 i {
@@ -86,6 +78,7 @@
             gap: 12px;
             align-items: center;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         .btn-primary {
@@ -112,10 +105,6 @@
             border-color: rgba(94, 135, 212, 0.6);
         }
 
-        .btn-primary:active {
-            transform: translateY(0px);
-        }
-
         .sync-status {
             display: flex;
             align-items: center;
@@ -125,6 +114,7 @@
             padding: 4px 12px;
             border-radius: 60px;
             background: rgba(41, 54, 68, 0.3);
+            margin-left: auto;
         }
 
         .sync-status .online { color: #8bddb0; }
@@ -141,7 +131,7 @@
             border: 1px solid rgba(41, 128, 185, 0.15);
             border-radius: 16px;
             padding: 16px 20px;
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -172,6 +162,39 @@
             font-weight: 500;
         }
 
+        .btn-small {
+            background: rgba(109, 140, 255, 0.15);
+            border: 1px solid rgba(109, 140, 255, 0.2);
+            color: #6d8cff;
+            padding: 6px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-small:hover {
+            background: rgba(109, 140, 255, 0.25);
+            transform: translateY(-1px);
+        }
+
+        .btn-danger-small {
+            background: rgba(165, 74, 90, 0.15);
+            border: 1px solid rgba(165, 74, 90, 0.2);
+            color: #f7a8a8;
+            padding: 6px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-danger-small:hover {
+            background: rgba(165, 74, 90, 0.3);
+        }
+
         .applications-panel {
             background: rgba(16, 23, 31, 0.6);
             backdrop-filter: blur(10px);
@@ -179,10 +202,6 @@
             padding: 20px 24px;
             border: 1px solid rgba(38, 48, 61, 0.4);
             transition: all 0.3s ease;
-        }
-
-        .applications-panel:hover {
-            border-color: rgba(38, 48, 61, 0.7);
         }
 
         .panel-header {
@@ -244,23 +263,6 @@
             overflow: hidden;
         }
 
-        .app-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(109, 140, 255, 0.03), transparent);
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .app-item:hover::before {
-            opacity: 1;
-        }
-
         .app-item:hover {
             border-color: rgba(109, 140, 255, 0.3);
             transform: translateY(-2px);
@@ -280,11 +282,6 @@
             display: flex;
             align-items: center;
             gap: 8px;
-        }
-
-        .app-info .app-title .pin {
-            color: #6d8cff;
-            font-size: 12px;
         }
 
         .app-info .app-meta {
@@ -473,11 +470,6 @@
             border-color: #6d8cff;
             box-shadow: 0 0 0 4px rgba(109, 140, 255, 0.1);
             background: rgba(28, 39, 54, 0.8);
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: #5a6f8a;
         }
 
         .form-group textarea {
@@ -800,15 +792,6 @@
             box-shadow: 0 4px 20px rgba(109, 140, 255, 0.1);
         }
 
-        .footer a i {
-            font-size: 16px;
-        }
-
-        .footer .footer-text {
-            color: #5a6f8a;
-            font-size: 13px;
-        }
-
         .toast {
             position: fixed;
             bottom: 30px;
@@ -844,31 +827,45 @@
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
+        .token-instructions {
+            background: rgba(41, 128, 185, 0.05);
+            border: 1px solid rgba(41, 128, 185, 0.1);
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin: 10px 0;
+            font-size: 13px;
+            color: #a5b9d9;
+            line-height: 1.6;
+        }
+
+        .token-instructions strong {
+            color: #6d8cff;
+        }
+
+        .token-instructions ol {
+            padding-left: 20px;
+            margin: 6px 0;
+        }
+
+        .token-instructions code {
+            background: rgba(28, 39, 54, 0.6);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #6d8cff;
+        }
+
         @media (max-width: 600px) {
-            .container { padding: 16px 18px; border-radius: 20px; }
-            .modal { padding: 20px 22px; border-radius: 20px; }
-            .header { flex-direction: column; align-items: stretch; }
-            .header-actions { justify-content: stretch; }
-            .btn-primary { justify-content: center; }
+            .container { padding: 16px; }
+            .modal { padding: 20px; }
             .app-detail .detail-label { width: 100px; font-size: 13px; }
             .app-detail .detail-value { font-size: 13px; }
             .reply-input-area { flex-direction: column; }
             .reply-input-area .btn-reply { align-self: stretch; justify-content: center; }
             .admin-actions .btn { flex: 1; justify-content: center; font-size: 12px; padding: 8px 14px; }
-            .logo h1 { font-size: 22px; }
-            .panel-header h3 { font-size: 16px; }
-            .app-item { padding: 12px 16px; }
-            .app-info .app-title { font-size: 14px; }
-            .footer { flex-direction: column; gap: 8px; text-align: center; }
+            .header-actions { flex-direction: column; align-items: stretch; }
+            .sync-status { margin-left: 0; justify-content: center; }
             .gist-setup { flex-direction: column; align-items: stretch; text-align: center; }
-        }
-
-        @media (max-width: 480px) {
-            .app-detail .detail-label { width: 80px; font-size: 12px; }
-            .app-detail .detail-value { font-size: 12px; }
-            .app-item { flex-direction: column; align-items: stretch; gap: 8px; }
-            .admin-actions { gap: 6px; }
-            .admin-actions .btn { font-size: 11px; padding: 6px 12px; }
         }
 
         .modal::-webkit-scrollbar { width: 6px; }
@@ -881,32 +878,52 @@
     <div class="container">
 
         <!-- HEADER -->
-        <div class="header">
-            <div class="logo">
-                <h1><i class="fas fa-hat-wizard"></i> VordWorld</h1>
+        <div class="logo">
+            <h1><i class="fas fa-hat-wizard"></i> VordWorld</h1>
+        </div>
+
+        <div class="header-actions">
+            <button class="btn-primary" id="openModalBtn">
+                <i class="fas fa-plus"></i> Создать тему
+            </button>
+            <span class="sync-status" id="syncStatus">
+                <i class="fas fa-circle offline"></i>
+                <span id="syncText">Ожидание...</span>
+            </span>
+        </div>
+
+        <!-- НАСТРОЙКА GITHUB GIST -->
+        <div class="gist-setup">
+            <div class="info">
+                <i class="fab fa-github"></i>
+                <span>Синхронизация через GitHub Gist: <span class="error-text" id="gistStatus">❌ Неверный токен</span></span>
             </div>
-            <div class="header-actions">
-                <span class="sync-status" id="syncStatus">
-                    <i class="fas fa-circle offline"></i>
-                    <span id="syncText">Подключение...</span>
-                </span>
-                <button class="btn-primary" id="openModalBtn">
-                    <i class="fas fa-plus"></i> Создать тему
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                <button class="btn-small" onclick="forceSync()">
+                    <i class="fas fa-sync"></i> Проверить токен
+                </button>
+                <button class="btn-danger-small" onclick="resetToken()">
+                    <i class="fas fa-key"></i> Сбросить токен
                 </button>
             </div>
         </div>
 
-        <!-- СТАТУС GIST -->
-        <div class="gist-setup">
-            <div class="info">
-                <i class="fab fa-github"></i>
-                <span>Синхронизация через GitHub Gist: <span class="status-text" id="gistStatus">🔄 Подключение...</span></span>
-            </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; font-size:13px; color:#889bb8;">
-                <span><i class="fas fa-check-circle" style="color:#8bddb0;"></i> ID: f7faac5...</span>
-                <span><i class="fas fa-sync-alt" style="color:#6d8cff;"></i> Обновление: каждые 10 сек</span>
-                <button class="btn-small" onclick="forceSync()" style="background:rgba(109,140,255,0.15); border:1px solid rgba(109,140,255,0.2); color:#6d8cff; padding:4px 12px; border-radius:40px; cursor:pointer; font-size:12px;">
-                    <i class="fas fa-sync"></i> Синхронизировать сейчас
+        <!-- ИНСТРУКЦИЯ ПО ТОКЕНУ -->
+        <div class="token-instructions" id="tokenInstructions">
+            <i class="fas fa-info-circle" style="color:#6d8cff;"></i>
+            <strong>Как создать правильный токен GitHub:</strong>
+            <ol>
+                <li>Зайдите в <a href="https://github.com/settings/tokens" target="_blank" style="color:#6d8cff;">Settings → Developer settings → Personal access tokens</a></li>
+                <li>Нажмите <strong>Generate new token (classic)</strong></li>
+                <li>Название: <code>vordworld</code></li>
+                <li>Выберите галочку <strong>gist</strong></li>
+                <li>Нажмите <strong>Generate token</strong> и скопируйте токен</li>
+                <li>Введите токен в поле ниже и нажмите <strong>Сохранить</strong></li>
+            </ol>
+            <div style="display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;">
+                <input type="text" id="newTokenInput" placeholder="Вставьте новый токен GitHub..." style="flex:1; min-width:200px; background:rgba(28,39,54,0.6); border:1px solid rgba(48,64,90,0.4); border-radius:12px; padding:10px 14px; color:#eef4ff; font-size:14px; outline:none;">
+                <button class="btn-small" onclick="saveNewToken()" style="background:rgba(42,155,106,0.2); border-color:rgba(42,155,106,0.3); color:#8bddb0;">
+                    <i class="fas fa-save"></i> Сохранить
                 </button>
             </div>
         </div>
@@ -1002,7 +1019,7 @@
                 </div>
                 <button class="btn-submit" id="submitApplicationBtn"><i class="fas fa-paper-plane"></i> Отправить заявку</button>
                 <div class="footnote">
-                    <i class="fas fa-info-circle"></i> Заявки автоматически синхронизируются между всеми устройствами через GitHub Gist.
+                    <i class="fas fa-info-circle"></i> Заявки сохраняются локально. Для синхронизации между устройствами настройте GitHub Gist.
                 </div>
             </div>
         </div>
@@ -1020,9 +1037,9 @@
     </div>
 
     <script>
-        // ========== ВАШИ ДАННЫЕ ДЛЯ СИНХРОНИЗАЦИИ ==========
+        // ========== НАСТРОЙКИ ==========
         const GIST_ID = 'f7faac50fcb55772b924c93c65aa115a';
-        const GITHUB_TOKEN = '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';
+        let GITHUB_TOKEN = localStorage.getItem('vordworld_github_token') || '';
 
         // ========== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ==========
         let isAdmin = false;
@@ -1031,7 +1048,6 @@
         let nextId = 1;
         let syncInterval = null;
         let isSyncing = false;
-        let syncErrorCount = 0;
 
         // DOM элементы
         const modalOverlay = document.getElementById('modalOverlay');
@@ -1081,9 +1097,48 @@
             } catch (e) { return false; }
         }
 
-        // ========== GITHUB GIST С ИСПРАВЛЕНИЯМИ ==========
+        // ========== УПРАВЛЕНИЕ ТОКЕНОМ ==========
+        function saveNewToken() {
+            const input = document.getElementById('newTokenInput');
+            const token = input.value.trim();
+            if (!token) {
+                showToast('❌ Введите токен', true);
+                return;
+            }
+            if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
+                showToast('❌ Неверный формат токена. Должен начинаться с ghp_ или github_pat_', true);
+                return;
+            }
+            GITHUB_TOKEN = token;
+            localStorage.setItem('vordworld_github_token', token);
+            input.value = '';
+            showToast('✅ Токен сохранён');
+            gistStatus.textContent = '🔄 Проверка токена...';
+            gistStatus.className = 'status-text';
+            setTimeout(() => syncFromGist(), 500);
+        }
+
+        function resetToken() {
+            if (!confirm('Удалить сохранённый токен GitHub?')) return;
+            GITHUB_TOKEN = '';
+            localStorage.removeItem('vordworld_github_token');
+            gistStatus.textContent = '❌ Токен удалён';
+            gistStatus.className = 'error-text';
+            updateSyncStatus('offline', 'Токен не установлен');
+            showToast('🗑️ Токен удалён');
+        }
+
+        // ========== GITHUB GIST ==========
         async function syncFromGist() {
             if (isSyncing) return;
+            
+            if (!GITHUB_TOKEN) {
+                gistStatus.textContent = '❌ Токен не установлен';
+                gistStatus.className = 'error-text';
+                updateSyncStatus('offline', 'Токен не установлен');
+                return;
+            }
+
             isSyncing = true;
 
             try {
@@ -1095,16 +1150,18 @@
                     }
                 });
 
+                if (response.status === 401) {
+                    gistStatus.textContent = '❌ Неверный токен';
+                    gistStatus.className = 'error-text';
+                    updateSyncStatus('offline', 'Неверный токен');
+                    showToast('❌ Токен GitHub недействителен. Создайте новый.', true);
+                    isSyncing = false;
+                    return;
+                }
+
                 if (!response.ok) {
                     if (response.status === 404) {
                         await createGistFile();
-                        isSyncing = false;
-                        return;
-                    }
-                    if (response.status === 401) {
-                        gistStatus.textContent = '❌ Неверный токен';
-                        gistStatus.className = 'error-text';
-                        updateSyncStatus('offline', 'Ошибка авторизации');
                         isSyncing = false;
                         return;
                     }
@@ -1156,20 +1213,12 @@
                 gistStatus.textContent = '✅ Синхронизировано';
                 gistStatus.className = 'status-text';
                 updateSyncStatus('online', 'Синхронизация через Gist');
-                syncErrorCount = 0;
 
             } catch (error) {
                 console.error('Ошибка синхронизации:', error);
-                syncErrorCount++;
-                
-                if (syncErrorCount > 3) {
-                    gistStatus.textContent = '⚠️ Ошибка соединения';
-                    gistStatus.className = 'error-text';
-                    updateSyncStatus('offline', 'Ошибка синхронизации');
-                    showToast('⚠️ Ошибка синхронизации с Gist', true);
-                } else {
-                    updateSyncStatus('syncing', 'Повторная попытка...');
-                }
+                gistStatus.textContent = '⚠️ Ошибка соединения';
+                gistStatus.className = 'error-text';
+                updateSyncStatus('offline', 'Ошибка синхронизации');
             }
 
             isSyncing = false;
@@ -1209,6 +1258,7 @@
         }
 
         async function pushToGist() {
+            if (!GITHUB_TOKEN) return;
             if (isSyncing) return;
             isSyncing = true;
 
@@ -1239,24 +1289,24 @@
                     gistStatus.textContent = '✅ Синхронизировано';
                     gistStatus.className = 'status-text';
                     updateSyncStatus('online', 'Синхронизация через Gist');
-                    syncErrorCount = 0;
                 } else if (response.status === 401) {
                     gistStatus.textContent = '❌ Неверный токен';
                     gistStatus.className = 'error-text';
-                    updateSyncStatus('offline', 'Ошибка авторизации');
-                } else {
-                    throw new Error(`HTTP ${response.status}`);
+                    updateSyncStatus('offline', 'Неверный токен');
                 }
 
             } catch (error) {
                 console.error('Ошибка отправки в Gist:', error);
-                updateSyncStatus('offline', 'Ошибка синхронизации');
             }
 
             isSyncing = false;
         }
 
         function forceSync() {
+            if (!GITHUB_TOKEN) {
+                showToast('❌ Сначала установите токен GitHub', true);
+                return;
+            }
             gistStatus.textContent = '🔄 Синхронизация...';
             gistStatus.className = 'status-text';
             updateSyncStatus('syncing', 'Синхронизация...');
@@ -1346,15 +1396,11 @@
                 html += `
                     <div class="app-item" data-id="${app.id}" onclick="openViewModal(${app.id})">
                         <div class="app-info">
-                            <div class="app-title">
-                                <span class="pin"><i class="fas fa-pin"></i></span>
-                                ${app.title || 'Без заголовка'}
-                            </div>
+                            <div class="app-title">${app.title || 'Без заголовка'}</div>
                             <div class="app-meta">
                                 <span><i class="fas fa-user"></i> ${app.author || 'Неизвестный'}</span>
                                 <span><i class="far fa-clock"></i> ${app.time || 'Неизвестно'}</span>
                                 <span><i class="far fa-comment"></i> ${(app.replies && app.replies.length) || 0} ответов</span>
-                                <span><i class="far fa-eye"></i> ${app.views || 0} просмотров</span>
                             </div>
                         </div>
                         <div>
@@ -1659,33 +1705,26 @@
 
         submitBtn.addEventListener('click', submitApplication);
 
-        document.querySelectorAll('#appTitle, #appNick, #appAge, #appAbout, #appModExp').forEach(field => {
-            field.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    submitApplication();
-                }
-            });
-        });
-
         // ========== ИНИЦИАЛИЗАЦИЯ ==========
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🚀 VordWorld загружен!');
-            console.log('📡 Gist ID:', GIST_ID);
-            console.log('🔑 Токен GitHub:', GITHUB_TOKEN ? '✅ Установлен' : '❌ Отсутствует');
             
             loadFromLocalStorage();
             renderApplications();
             checkAdminStatus();
             
-            // Запускаем синхронизацию
-            gistStatus.textContent = '🔄 Подключение...';
-            updateSyncStatus('syncing', 'Подключение к Gist...');
-            
-            setTimeout(async () => {
-                await syncFromGist();
-                startSync();
-            }, 1000);
+            if (GITHUB_TOKEN) {
+                gistStatus.textContent = '🔄 Проверка токена...';
+                gistStatus.className = 'status-text';
+                setTimeout(() => {
+                    syncFromGist();
+                    startSync();
+                }, 500);
+            } else {
+                gistStatus.textContent = '❌ Токен не установлен';
+                gistStatus.className = 'error-text';
+                updateSyncStatus('offline', 'Токен не установлен');
+            }
         });
     </script>
 </body>
