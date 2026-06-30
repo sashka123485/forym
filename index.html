@@ -167,6 +167,11 @@
             font-weight: 500;
         }
 
+        .gist-setup .error-text {
+            color: #f7a8a8;
+            font-weight: 500;
+        }
+
         .applications-panel {
             background: rgba(16, 23, 31, 0.6);
             backdrop-filter: blur(10px);
@@ -882,8 +887,8 @@
             </div>
             <div class="header-actions">
                 <span class="sync-status" id="syncStatus">
-                    <i class="fas fa-circle online"></i>
-                    <span id="syncText">Синхронизация через Gist</span>
+                    <i class="fas fa-circle offline"></i>
+                    <span id="syncText">Подключение...</span>
                 </span>
                 <button class="btn-primary" id="openModalBtn">
                     <i class="fas fa-plus"></i> Создать тему
@@ -891,15 +896,18 @@
             </div>
         </div>
 
-        <!-- СТАТУС GIST (уже настроен) -->
+        <!-- СТАТУС GIST -->
         <div class="gist-setup">
             <div class="info">
                 <i class="fab fa-github"></i>
-                <span>Синхронизация через GitHub Gist: <span class="status-text">✅ Подключено</span></span>
+                <span>Синхронизация через GitHub Gist: <span class="status-text" id="gistStatus">🔄 Подключение...</span></span>
             </div>
             <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; font-size:13px; color:#889bb8;">
                 <span><i class="fas fa-check-circle" style="color:#8bddb0;"></i> ID: f7faac5...</span>
                 <span><i class="fas fa-sync-alt" style="color:#6d8cff;"></i> Обновление: каждые 10 сек</span>
+                <button class="btn-small" onclick="forceSync()" style="background:rgba(109,140,255,0.15); border:1px solid rgba(109,140,255,0.2); color:#6d8cff; padding:4px 12px; border-radius:40px; cursor:pointer; font-size:12px;">
+                    <i class="fas fa-sync"></i> Синхронизировать сейчас
+                </button>
             </div>
         </div>
 
@@ -1023,6 +1031,7 @@
         let nextId = 1;
         let syncInterval = null;
         let isSyncing = false;
+        let syncErrorCount = 0;
 
         // DOM элементы
         const modalOverlay = document.getElementById('modalOverlay');
@@ -1037,6 +1046,7 @@
         const toastMessage = document.getElementById('toastMessage');
         const syncStatus = document.getElementById('syncStatus');
         const syncText = document.getElementById('syncText');
+        const gistStatus = document.getElementById('gistStatus');
 
         // ========== TOAST ==========
         function showToast(message, isError = false) {
@@ -1044,7 +1054,7 @@
             toast.className = 'toast show';
             if (isError) toast.classList.add('error');
             clearTimeout(toast._timeout);
-            toast._timeout = setTimeout(() => toast.classList.remove('show'), 3000);
+            toast._timeout = setTimeout(() => toast.classList.remove('show'), 4000);
         }
 
         // ========== LOCAL STORAGE ==========
@@ -1071,7 +1081,7 @@
             } catch (e) { return false; }
         }
 
-        // ========== GITHUB GIST ==========
+        // ========== GITHUB GIST С ИСПРАВЛЕНИЯМИ ==========
         async function syncFromGist() {
             if (isSyncing) return;
             isSyncing = true;
@@ -1080,32 +1090,45 @@
                 const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
                     headers: {
                         'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Accept': 'application/vnd.github.v3+json'
+                        'Accept': 'application/vnd.github.v3+json',
+                        'User-Agent': 'VordWorld-App/1.0'
                     }
                 });
 
                 if (!response.ok) {
-                    updateSyncStatus('offline', 'Ошибка синхронизации');
-                    isSyncing = false;
-                    return;
+                    if (response.status === 404) {
+                        await createGistFile();
+                        isSyncing = false;
+                        return;
+                    }
+                    if (response.status === 401) {
+                        gistStatus.textContent = '❌ Неверный токен';
+                        gistStatus.className = 'error-text';
+                        updateSyncStatus('offline', 'Ошибка авторизации');
+                        isSyncing = false;
+                        return;
+                    }
+                    if (response.status === 403) {
+                        gistStatus.textContent = '⚠️ Лимит запросов';
+                        gistStatus.className = 'error-text';
+                        updateSyncStatus('offline', 'Лимит запросов');
+                        isSyncing = false;
+                        return;
+                    }
+                    throw new Error(`HTTP ${response.status}`);
                 }
 
                 const data = await response.json();
                 const files = data.files || {};
                 const dataFile = files['vordworld_data.json'] || files['data.json'];
                 
-                if (!dataFile) {
+                if (!dataFile || !dataFile.content) {
                     await createGistFile();
                     isSyncing = false;
                     return;
                 }
 
                 const content = dataFile.content;
-                if (!content) {
-                    isSyncing = false;
-                    return;
-                }
-
                 const parsed = JSON.parse(content);
                 const remoteApps = parsed.applications || [];
                 const remoteNextId = parsed.nextId || 1;
@@ -1130,11 +1153,23 @@
                     showToast(`📥 Загружено ${newApps} новых заявок`);
                 }
 
+                gistStatus.textContent = '✅ Синхронизировано';
+                gistStatus.className = 'status-text';
                 updateSyncStatus('online', 'Синхронизация через Gist');
+                syncErrorCount = 0;
 
             } catch (error) {
                 console.error('Ошибка синхронизации:', error);
-                updateSyncStatus('offline', 'Ошибка синхронизации');
+                syncErrorCount++;
+                
+                if (syncErrorCount > 3) {
+                    gistStatus.textContent = '⚠️ Ошибка соединения';
+                    gistStatus.className = 'error-text';
+                    updateSyncStatus('offline', 'Ошибка синхронизации');
+                    showToast('⚠️ Ошибка синхронизации с Gist', true);
+                } else {
+                    updateSyncStatus('syncing', 'Повторная попытка...');
+                }
             }
 
             isSyncing = false;
@@ -1148,7 +1183,8 @@
                     headers: {
                         'Authorization': `token ${GITHUB_TOKEN}`,
                         'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github.v3+json'
+                        'Accept': 'application/vnd.github.v3+json',
+                        'User-Agent': 'VordWorld-App/1.0'
                     },
                     body: JSON.stringify({
                         files: {
@@ -1158,8 +1194,16 @@
                         }
                     })
                 });
-                return response.ok;
+
+                if (response.ok) {
+                    gistStatus.textContent = '✅ Файл создан';
+                    gistStatus.className = 'status-text';
+                    showToast('✅ Файл данных создан в Gist');
+                    return true;
+                }
+                return false;
             } catch (e) {
+                console.error('Ошибка создания файла:', e);
                 return false;
             }
         }
@@ -1179,7 +1223,8 @@
                     headers: {
                         'Authorization': `token ${GITHUB_TOKEN}`,
                         'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github.v3+json'
+                        'Accept': 'application/vnd.github.v3+json',
+                        'User-Agent': 'VordWorld-App/1.0'
                     },
                     body: JSON.stringify({
                         files: {
@@ -1191,9 +1236,16 @@
                 });
 
                 if (response.ok) {
+                    gistStatus.textContent = '✅ Синхронизировано';
+                    gistStatus.className = 'status-text';
                     updateSyncStatus('online', 'Синхронизация через Gist');
+                    syncErrorCount = 0;
+                } else if (response.status === 401) {
+                    gistStatus.textContent = '❌ Неверный токен';
+                    gistStatus.className = 'error-text';
+                    updateSyncStatus('offline', 'Ошибка авторизации');
                 } else {
-                    updateSyncStatus('offline', 'Ошибка синхронизации');
+                    throw new Error(`HTTP ${response.status}`);
                 }
 
             } catch (error) {
@@ -1204,11 +1256,19 @@
             isSyncing = false;
         }
 
+        function forceSync() {
+            gistStatus.textContent = '🔄 Синхронизация...';
+            gistStatus.className = 'status-text';
+            updateSyncStatus('syncing', 'Синхронизация...');
+            syncFromGist();
+            showToast('🔄 Синхронизация запущена');
+        }
+
         function startSync() {
             if (syncInterval) clearInterval(syncInterval);
             syncInterval = setInterval(() => {
                 syncFromGist();
-            }, 10000);
+            }, 15000);
         }
 
         function updateSyncStatus(status, text) {
@@ -1619,11 +1679,13 @@
             checkAdminStatus();
             
             // Запускаем синхронизацию
+            gistStatus.textContent = '🔄 Подключение...';
             updateSyncStatus('syncing', 'Подключение к Gist...');
+            
             setTimeout(async () => {
                 await syncFromGist();
                 startSync();
-            }, 500);
+            }, 1000);
         });
     </script>
 </body>
